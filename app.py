@@ -85,12 +85,14 @@ class Classifier(nn.Module):
 # ---------------- LOAD MODEL ----------------
 @st.cache_resource
 def load_model():
-    model = Classifier().to(DEVICE)
-    model.load_state_dict(torch.load("best_clf.pt", map_location=DEVICE))
+    encoder = Encoder(in_channels=2, feat_dim=512).to(DEVICE)
+    model = Classifier(encoder).to(DEVICE)
+
+    state_dict = torch.load("best_clf.pt", map_location=DEVICE)
+    model.load_state_dict(state_dict)
+
     model.eval()
     return model
-
-model = load_model()
 
 # ---------------- HELPERS ----------------
 def preprocess(image):
