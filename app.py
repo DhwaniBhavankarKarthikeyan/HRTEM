@@ -173,7 +173,8 @@ if uploaded_file:
     with col2:
         st.subheader("FFT")
         fft_vis = torch.log(torch.abs(torch.fft.fft2(torch.from_numpy(img))) + 1e-6).numpy()
-        st.image(fft_vis)
+        fft_vis = (fft_vis - fft_vis.min()) / (fft_vis.max() - fft_vis.min() + 1e-6) # Normalize to [0,1]
+        st.image(fft_vis, clamp=True)
 
     with col3:
         st.subheader("Probabilities")
